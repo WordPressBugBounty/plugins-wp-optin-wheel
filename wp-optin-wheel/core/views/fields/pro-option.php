@@ -3,5 +3,5 @@
 ?>
 
 <div class="pro-option-teaser">
-	<?php _e($option->value? $option->value : "This option is available in the premium version."); ?>
+	<?php echo $option->value? $option->value : __("This option is available in the premium version.", \MABEL_WOF_LITE\Core\Common\Managers\Config_Manager::$slug); ?>
 </div>

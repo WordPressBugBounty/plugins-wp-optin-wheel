@@ -5,20 +5,20 @@ if(!defined('ABSPATH')){
 }
 $id = $option->name === null ? $option->id : $option->name;
 ?>
-<div class="mabel-media-selector" data-for="<?php _e($id); ?>">
+<div class="mabel-media-selector" data-for="<?php echo esc_attr($id); ?>">
 
-	<div class="mabel-media-preview" style="<?php if(empty($option->value)) _e('display:none;'); ?>">
-		<img src="<?php _e($option->value); ?>">
+	<div class="mabel-media-preview" style="<?php if(empty($option->value)) echo 'display:none;'; ?>">
+		<img src="<?php echo esc_attr($option->value); ?>">
 	</div>
 
 	<a class="mabel-btn" href="#">
-		<?php _e($option->button_text); ?>
+		<?php echo esc_html($option->button_text); ?>
 	</a>
 
 	<input
 		type="hidden"
-		name="<?php _e($id); ?>"
-		value="<?php _e($option->value); ?>"
+		name="<?php echo esc_attr($id); ?>"
+		value="<?php echo esc_attr($option->value); ?>"
 		class="mabel-formm-element"
 	/>
 

@@ -4,7 +4,7 @@
 
 <div class="wof-overlay" style="display: none;"></div>
 
-<div class="wof-wheels" data-wof-nonce="<?php _e(wp_create_nonce('wof-nonce')) ?>">
+<div class="wof-wheels" data-wof-nonce="<?php echo wp_create_nonce('wof-nonce') ?>">
 	<?php
 		foreach($model->wheels as $wheel) {
 			echo \MABEL_WOF_LITE\Core\Common\Html::view('wheel', $wheel);

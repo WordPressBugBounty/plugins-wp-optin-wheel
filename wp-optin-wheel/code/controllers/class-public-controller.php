@@ -40,7 +40,12 @@ namespace MABEL_WOF_LITE\Code\Controllers
 
 			$this->add_ajax_function('wof-lite-email-optin', $this, 'add_email_to_list',true, true);
 			$this->add_ajax_function('wof-lite-play', $this, 'play',true, true);
-		}
+
+            add_filter( 'rocket_lrc_exclusions', function( $exclusions ) {
+                $exclusions[] = 'wof-wheels';
+                return $exclusions;
+            } );
+        }
 
 		public function play($wheel) {
 			if(!isset($_POST['nonce']) || !isset($_POST['id']) || !isset($_POST['action']) ||
@@ -58,7 +63,6 @@ namespace MABEL_WOF_LITE\Code\Controllers
 			$segment = Wheel_service::calculate_segment_hit($wheel);
 
 			$winning = $segment->type != 0;
-			$wheel->plays_left = 0;
 			$is_last = true;
 
 			if(Settings_Manager::get_setting('log') === true)

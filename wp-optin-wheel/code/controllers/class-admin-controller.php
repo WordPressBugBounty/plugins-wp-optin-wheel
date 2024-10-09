@@ -441,8 +441,8 @@ namespace MABEL_WOF_LITE\Code\Controllers
 				$this->add_data_attribute_for_data_bind(new Dropdown_Option('bgpattern','Background pattern', [
 					'none' => 'No pattern',
 					'hearts' => 'Hearts'
-				], 'hearts', 'More options in premium.')),
-				new Pro_option('Colors','This is a pro feature. You can define several colors to make the wheel fit your website design.')
+				], 'hearts', 'More options in Pro.')),
+				new Pro_option('Advanced design settings (colors, logo, custom background, confetti, audio, ...)','This is a pro feature. You can define each slice\'s color, add a logo, custom background, and more to make your wheel pop!.')
 			];
 
 			$behavior_settings = new Container_Option(null, __('Behavior setting', $this->slug));
@@ -450,11 +450,15 @@ namespace MABEL_WOF_LITE\Code\Controllers
 			$behavior_settings->options = [
 				new Pro_option(
 					__('Hide on mobile', $this->slug),
-					__('This is a premium feature.', $this->slug)
+					__('This is a Pro feature.', $this->slug)
 				),
+                new Pro_option(
+                    __('Logged in/logged out', $this->slug),
+                    __('This is a Pro feature where you can decide to show the wheel to all users, or only logged in/logged out users.', $this->slug)
+                ),
 				new Pro_option(
-					__('Show on pages', $this->slug),
-					__('This is a premium feature in which you can decide on what pages or custom post types to show/hide the wheel.', $this->slug)
+					__('Show on these pages', $this->slug),
+					__('This is a Pro feature in which you can decide on which pages or custom post types to show/hide the wheel.', $this->slug)
 				)
 			];
 
@@ -466,7 +470,7 @@ namespace MABEL_WOF_LITE\Code\Controllers
 						'delay' => 'After a delay',
 					],
 					null,
-					__('More options in premium.', $this->slug)
+					__('More options in Pro, such as by clicking a widget or button, on a timer, ...', $this->slug)
 			)));
 			array_push($behavior_settings->options,$this->add_data_attribute_for_data_bind(new Number_Option(
 				'appeardelay',
@@ -488,7 +492,17 @@ namespace MABEL_WOF_LITE\Code\Controllers
 				__('days', $this->slug)
 			)));
 
-			$list_settings = new Container_Option(null, __('List settings',$this->slug));
+                      array_push($behavior_settings->options,$this->add_data_attribute_for_data_bind(new Pro_option(
+              __('Spinning Speed', $this->slug),
+              __('This is a Pro feature.', $this->slug)
+          )));
+
+            array_push($behavior_settings->options,$this->add_data_attribute_for_data_bind(new Pro_option(
+                __('Spinning Time', $this->slug),
+                __('This is a Pro feature.', $this->slug)
+            )));
+
+            			$list_settings = new Container_Option(null, __('List settings',$this->slug));
 
 			$list_settings->options = [
 				new Dropdown_Option(
@@ -505,7 +519,19 @@ namespace MABEL_WOF_LITE\Code\Controllers
 					null,
 					__('To which email list should your visitors opt in?', $this->slug)
 				),
-				new Pro_option('Form fields builder','This is a pro feature in which you can add more fields, rather than only an email field.')
+				new Pro_option('Form fields builder','This is a pro feature in which you can add more fields, rather than only an email field.'),
+               new Pro_option(
+                    __('Validate email domains.', $this->slug),
+                    __('This is a Pro feature where you email addresses will be validated against an up-to-date list of fake emails .', $this->slug)
+                ),
+                new Pro_option(
+                    __('Check IP addresses.', $this->slug),
+                    __('This is a Pro anti-cheat feature.', $this->slug)
+                ),
+                new Pro_option(
+                    __('Only display prizes in emails, not on screen.', $this->slug),
+                    __('This is a Pro anti-cheat feature.', $this->slug)
+                )
 			];
 
 			$form_builder_for_lists_settings = 	new Custom_Option(null,'form-builder-lists');
@@ -541,11 +567,14 @@ namespace MABEL_WOF_LITE\Code\Controllers
 
 		private function add_data_attribute_for_data_bind(Option $option)
 		{
-			$option->data_attributes['key'] = $option->id;
-			if(substr($option->id, -strlen('_list')) === '_list')
-				$option->data_attributes['optin-list'] = '';
-			return $option;
-		}
+            if( ! empty( $option->id) ) {
+                $option->data_attributes[ 'key' ] = $option->id;
+                if ( substr( $option->id, -strlen( '_list' ) ) === '_list' )
+                    $option->data_attributes[ 'optin-list' ] = '';
+            }
+            return $option;
+
+            		}
 
 	}
 }

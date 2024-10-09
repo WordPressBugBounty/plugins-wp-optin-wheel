@@ -14,7 +14,7 @@ $id = $option->name === null ? $option->id : $option->name;
 	/>
 
 	<div class="mabel-mc-chosen">
-		<em class="infotext" style="<?php if(!empty($option->value)) _e('display:none'); ?>">
+		<em class="infotext" style="<?php if(!empty($option->value)) echo 'display:none'; ?>">
 			<?php _e("Choose from the items below", \MABEL_WOF_LITE\Core\Common\Managers\Config_Manager::$slug); ?>
 		</em>
 

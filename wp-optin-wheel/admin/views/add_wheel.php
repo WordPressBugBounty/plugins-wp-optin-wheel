@@ -19,8 +19,9 @@
 	</ul>
 	<div class="step-tracker-content">
 		<div data-step="1" class="t-c p-t-5">
-			<div class="wof-error error-mail-lists">
-				Before you can create wheels, please enter your MailChimp API key in the "email integration" tab.
+			<div class="wof-warn error-mail-lists">
+                <?php _e('Before you can create wheels, please enter your MailChimp API key in the "email integration" tab.', $slug); ?><br/>
+                <?php _e('Don\'t want to use MailChimp? Consider upgrading to the Pro version.', $slug); ?>
 			</div>
 			<div class="wof-step-1" style="display: none;">
 				<div class="wof-theme-wrapper">
@@ -28,11 +29,11 @@
 						foreach($data['themes'] as $id => $title) {
 							?>
 							<div class="wof-theme">
-								<div><?php _e($title) ?></div>
-								<label for="wof-theme-<?php _e($id) ?>">
-									<img src="<?php _e($data['base_url'].'/admin/img/wheel-'.$id.'.png') ?>" />
+								<div><?php echo esc_html($title) ?></div>
+								<label for="wof-theme-<?php echo esc_attr($id) ?>">
+									<img src="<?php echo esc_attr($data['base_url'].'/admin/img/wheel-'.$id.'.png') ?>" />
 								</label>
-								<input class="skip-save" <?php echo $id === 'vintage'?'checked':''; ?> name="wof-wheel-theme" type="radio" value="<?php _e($id) ?>" id="wof-theme-<?php _e($id) ?>" />
+								<input class="skip-save" <?php echo $id === 'vintage'?'checked':''; ?> name="wof-wheel-theme" type="radio" value="<?php echo esc_attr($id) ?>" id="wof-theme-<?php echo esc_attr($id) ?>" />
 							</div>
 							<?php
 						}
@@ -40,19 +41,19 @@
 					<div class="pro-option-teaser">
 						<div style="padding-bottom: 15px;text-align: center;"><b>Build your own unlimited themes</b> or enjoy pre-built themes (including <b>seasonal</b> themes like "Christmas") in premium.</div>
 						<div class="wof-theme">
-							<img src="<?php _e($data['base_url'].'/admin/img/wheel-black-and-white.png') ?>" />
+							<img src="<?php echo esc_attr($data['base_url']).'/admin/img/wheel-black-and-white.png' ?>" />
 						</div>
 						<div class="wof-theme">
-							<img src="<?php _e($data['base_url'].'/admin/img/wheel-alt-blue.png') ?>" />
+							<img src="<?php echo esc_attr($data['base_url']).'/admin/img/wheel-alt-blue.png' ?>" />
 						</div>
 						<div class="wof-theme">
-							<img src="<?php _e($data['base_url'].'/admin/img/wheel-blue.png') ?>" />
+							<img src="<?php echo esc_attr($data['base_url']).'/admin/img/wheel-blue.png' ?>" />
 						</div>
 					</div>
 				</div>
 				<div class="m-t-5 t-c">
-					<button class="mabel-btn-next-step mabel-btn">Next</button>
-					<button class="btn-save-wheel mabel-btn btn-save-when-editing" style="display: none;">Save</button>
+					<button class="mabel-btn-next-step mabel-btn"><?php _e('Next', $slug); ?></button>
+					<button class="btn-save-wheel mabel-btn btn-save-when-editing" style="display: none;"><?php _e('Save', $slug); ?></button>
 				</div>
 			</div>
 		</div>
@@ -72,14 +73,14 @@
 			</table>
 
 			<div class="p-t-5 t-c">
-				<button class="mabel-btn-prev-step mabel-btn mabel-secondary">Back</button>
-				<button class="mabel-btn-next-step mabel-btn">Next</button>
-				<button class="btn-save-wheel mabel-btn btn-save-when-editing" style="display: none;">Save</button>
+				<button class="mabel-btn-prev-step mabel-btn mabel-secondary"><?php _e('Back', $slug); ?></button>
+				<button class="mabel-btn-next-step mabel-btn"><?php _e('Next', $slug); ?></button>
+				<button class="btn-save-wheel mabel-btn btn-save-when-editing" style="display: none;"><?php _e('Save', $slug); ?></button>
 			</div>
 		</div>
 
 		<div data-step="3" class="skip-save p-t-5" style="display: none;">
-			<p>A wheel has 12 slices. Below you can define each slice in detail.</p>
+			<p><?php _e('A wheel has 12 slices. Below you can define each slice in detail.', $slug); ?></p>
 			<table class="form-table wof-slice-wrapper m-t-5">
 				<thead>
 					<th style="width:45px;"></th>
@@ -95,32 +96,31 @@
 				<tbody></tbody>
 			</table>
 			<div class="wof-total">
-				Chance total: <span class="wof-total-percentage"></span> %</th>
+                <?php _e('Chance total', $slug); ?>: <span class="wof-total-percentage"></span> %</th>
 			</div>
 			<p class="msg-bad msg-incorrect-percentage" style="display: none;">
-				<?php _e("The total sum of chance should be 100. Please double check and adjust accordingly.") ?>
+				<?php _e("The total sum of chance should be 100. Please double check and adjust accordingly.", $slug) ?>
 			</p>
 			<div class="p-t-5 t-c">
-				<button class="mabel-btn-prev-step mabel-btn mabel-secondary">Back</button>
-				<button class="mabel-btn mabel-btn-next-step ">Next</button>
-				<button class="btn-save-wheel mabel-btn btn-save-when-editing" style="display: none;">Save</button>
+				<button class="mabel-btn-prev-step mabel-btn mabel-secondary"><?php _e('Back', $slug); ?></button>
+				<button class="mabel-btn mabel-btn-next-step "><?php _e('Next', $slug); ?></button>
+				<button class="btn-save-wheel mabel-btn btn-save-when-editing" style="display: none;"><?php _e('Save', $slug); ?></button>
 			</div>
 		</div>
 
 		<div data-step="4" class="skip-save p-t-5" style="display: none;">
 			<div class="form-builder-for-lists">
-				<div class="wof-info-bubble">
-					Build your opt-in form here. This is what the user needs to fill out before playing or seeing their prize.
-					The premium version allows to add more fields.
+				<div class="wof-info-bubble pro-option-teaser">
+                    <?php _e('Build your opt-in form here. This is what the user needs to fill out before playing or seeing their prize.<br/>The premium version allows to add more <strong>fields and field types</strong>.', $slug); ?>
 				</div>
 				<?php
 					\MABEL_WOF_LITE\Core\Common\Html::option($data['form_builder_for_lists']);
 				?>
 			</div>
 			<div class="p-t-5 t-c">
-				<button class="mabel-btn-prev-step mabel-btn mabel-secondary">Back</button>
-				<button class="mabel-btn-next-step mabel-btn">Next</button>
-				<button class="btn-save-wheel mabel-btn btn-save-when-editing" style="display: none;">Save</button>
+				<button class="mabel-btn-prev-step mabel-btn mabel-secondary"><?php _e('Back', $slug); ?></button>
+				<button class="mabel-btn-next-step mabel-btn"><?php _e('Next', $slug); ?></button>
+				<button class="btn-save-wheel mabel-btn btn-save-when-editing" style="display: none;"><?php _e('Save', $slug); ?></button>
 			</div>
 		</div>
 
@@ -139,8 +139,8 @@
 			</table>
 
 			<div class="p-t-5 t-c">
-				<button class="mabel-btn-prev-step mabel-btn mabel-secondary">Back</button>
-				<button class="btn-save-wheel mabel-btn">Save</button>
+				<button class="mabel-btn-prev-step mabel-btn mabel-secondary"><?php _e('Back', $slug); ?></button>
+				<button class="btn-save-wheel mabel-btn"><?php _e('Save', $slug); ?></button>
 			</div>
 		</div>
 
@@ -184,7 +184,7 @@
 			</span>
 		</td>
 		<td>
-			<a style="display: none;" class="btn-wc-coupon-settings" data-slice="{{=index+1}}" href="#">More settings</a>
+			<a style="display: none;" class="btn-wc-coupon-settings" data-slice="{{=index+1}}" href="#"><?php _e('More settings', $slug); ?></a>
 		</td>
 	</tr>
 	{{~}}

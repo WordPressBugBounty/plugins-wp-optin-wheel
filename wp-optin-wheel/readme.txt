@@ -2,9 +2,9 @@
 Contributors: studiowombat,maartenbelmans
 Tags: optin, spin wheel, wheel, fortune, gamification
 Requires at least: 4.1
-Tested up to: 6.6.1
+Tested up to: 6.7
 Requires PHP: 5.6
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,12 @@ Coming soon...
 
 == Changelog ==
 
+= 1.4.7 =
+ * Improvement: Minor performance and security enhancements.
+ * Fix: fixed a PHP 8.2+ warning.
+ * Fix: exclude our HTML from WP Rocket's new "Lazy Rendering" feature as it works incorrectly.
+ * Other: verify WP 6.7 compatibility.
+ 
 = 1.4.6 =
  * Fix: fixed a few PHP deprecation warnings in PHP 8.2+.
  

@@ -9,7 +9,7 @@
 	<?php echo !empty($option->dependency) ? 'data-dependency="' . htmlspecialchars(json_encode($option->dependency,ENT_QUOTES)) . '"':''; ?>
 	class="widefat mabel-date-picker mabel-form-element"
 	<?php echo $option->get_extra_data_attributes(); ?>
-	data-options="<?php esc_attr_e(json_encode($option->options)) ?>"
+	data-options="<?php echo esc_attr(json_encode($option->options)) ?>"
 />
 
 <?php

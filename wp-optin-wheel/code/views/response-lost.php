@@ -3,5 +3,5 @@
 ?>
 
 <button class="wof-btn-done wof-close wof-color-2">
-	<?php _e($model->setting_or_default('button_done','Close this')) ?>
+	<?php echo esc_html($model->setting_or_default('button_done','Close this')) ?>
 </button>

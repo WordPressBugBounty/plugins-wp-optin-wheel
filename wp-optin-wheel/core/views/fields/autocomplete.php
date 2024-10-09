@@ -1,7 +1,7 @@
 <?php
 	/** @var \MABEL_WOF_LITE\Core\Models\Autocomplete_Option $option */
 ?>
-<div class="mabel-autocomplete-wrapper <?php echo $option->name === null ? $option->id : $option->name; ?>" data-action="<?php _e($option->ajax_action) ?>">
+<div class="mabel-autocomplete-wrapper <?php echo $option->name === null ? $option->id : $option->name; ?>" data-action="<?php echo esc_attr($option->ajax_action) ?>">
 	<input type="hidden"
 	       name="<?php echo $option->name === null ? $option->id : $option->name; ?>"
 	       value="<?php echo $option->value; ?>"
