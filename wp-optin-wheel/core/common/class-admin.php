@@ -65,9 +65,24 @@ namespace MABEL_WOF_LITE\Core\Common
 			$page = add_options_page('', Config_Manager::$name, $this->capability, Config_Manager::$slug, [ $this,'display_settings'] );
 		}
 
-		public function init_settings()
-		{
-			register_setting( Config_Manager::$slug , Config_Manager::$settings_key );
+		public function init_settings() {
+            register_setting(
+                Config_Manager::$slug,
+                Config_Manager::$settings_key,
+                [
+                    'sanitize_callback' => function ( $settings ) {
+                    
+                        if ( isset( $settings['mailchimp_api'] ) && ! preg_match('/^[a-f0-9]{32}-us\d+$/i', $settings['mailchimp_api'])) {
+                            return get_option( Config_Manager::$settings_key ); // Prevent saving
+                        }
+                        
+                        return $settings; // Valid, save
+                        
+                    }
+                ]
+            );
+            
+			//register_setting( Config_Manager::$slug , Config_Manager::$settings_key );
 		}
 
 		public function display_settings()

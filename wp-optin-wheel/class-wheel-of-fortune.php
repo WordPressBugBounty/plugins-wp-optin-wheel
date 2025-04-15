@@ -68,7 +68,7 @@ namespace MABEL_WOF_LITE
 		}
 
 		public function add_suggested_privacy_content() {
-			if(function_exists('wp_add_privacy_policy_content')){
+			if(function_exists('wp_add_privacy_policy_content')) {
 				$content = Html::view('admin/views/privacy-policy-suggestions',null);
 				wp_add_privacy_policy_content( Config_Manager::$name, $content );
 			}
