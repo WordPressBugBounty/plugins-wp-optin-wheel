@@ -20,39 +20,25 @@ namespace MABEL_WOF_LITE
 		 * @var Language_Manager language manager.
 		 */
 		protected $language_manager;
-
-		/**
-		 * Business_Hours_Indicator constructor.
-		 *
-		 * @param $dir string
-		 * @param $url string
-		 * @param $slug string
-		 * @param $version string
-		 */
+        
 		public function __construct($dir, $url, $plugin_base, $name, $version, $settings_key)
 		{
-			// Init meta info.
 			Config_Manager::init($dir, $url, $plugin_base, $version, $settings_key, $name);
 		}
 
 		public function run()
 		{
-			// Init translations.
 			$this->language_manager = new Language_Manager();
 
-			// Init settings with defaults.
 			Settings_Manager::init( [
 				'log' => false
 			]);
 
-			// Kick off admin page.
 			if(is_admin())
 				new Admin_Controller();
 
-			// Kick off public side of things.
 			new Public_Controller();
 
-			// Register post type
 			Registry::get_loader()->add_action('init',$this,'register_post_type');
 
 			Registry::get_loader()->add_action('plugins_loaded',$this,'upgrade_routine');
@@ -141,9 +127,9 @@ namespace MABEL_WOF_LITE
 				if(!empty($matches)) {
 					$item_id = "wp-optin-wheel-lite-log-".$email;
 					$group_id = 'wp-optin-wheel-lite';
-					$group_label = __( 'Optin Wheel Plugin Data' );
+					$group_label = __( 'Optin Wheel Plugin Data', 'wp-optin-wheel' );
 					$data = [ [
-						'name' => __('Logs for user', Config_Manager::$slug),
+						'name' => __('Logs for user', 'wp-optin-wheel' ),
 						'value' => join('<br/>',$matches)
 					] ];
 
@@ -176,9 +162,8 @@ namespace MABEL_WOF_LITE
 		public function upgrade_routine() {
 			$version = get_option('wof-lite-dev-version');
 
-			if($version !== Config_Manager::$version) {
+			if( $version !== Config_Manager::$version ) {
 
-				// Update database
 				global $wpdb;
 				$charset_collate = $wpdb->get_charset_collate();
 				$table_name = $wpdb->prefix . 'wof_lite_optins';

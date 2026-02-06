@@ -5,7 +5,7 @@
 		<ul style="padding-left:15px;list-style-type: disc">
 			<li>Full integration with WooCommerce</li>
 			<li>Create your own themes</li>
-			<li>Add other fields to the form</li>
+			<li>Form builder: add more fields to the opt-in form</li>
 			<li>Limit prizes</li>
 			<li>Add/remove slices</li>
 			<li>Supports 10+ marketing tools</li>

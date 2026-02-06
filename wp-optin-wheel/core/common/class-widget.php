@@ -34,27 +34,28 @@ namespace MABEL_WOF_LITE\Core\Common
 		public function widget( $args, $instance ) {
 			$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
-			echo $args['before_widget'];
+			echo wp_kses_post( $args['before_widget'] );
+            
 			if ( $title ) {
-				echo $args['before_title'] . $title . $args['after_title'];
+				echo wp_kses_post( $args['before_title'] . $title . $args['after_title'] );
 			}
 
 			$argument_list = [];
 
 			foreach($instance as $k => $v) {
-				array_push($argument_list, $k . '="' .$v . '"' );
+				$argument_list[] = $k . '="' . $v . '"';
 			}
 
 			echo do_shortcode('[' . $this->shortcode . ' ' .join(' ', $argument_list) . ']');
 
-			echo $args['after_widget'];
+			echo wp_kses_post( $args['after_widget'] );
 		}
 
 
 		public function form( $instance )
 		{
 			if($this->warning){
-				echo $this->warning;
+				echo esc_html( $this->warning );
 			}else{
 
 				// Add all saved values to the options
@@ -70,6 +71,7 @@ namespace MABEL_WOF_LITE\Core\Common
 
 				include Config_Manager::$dir . 'core/views/widget_form.php';
 
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo ob_get_clean();
 			}
 		}

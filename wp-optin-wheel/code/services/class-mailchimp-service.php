@@ -28,10 +28,16 @@ namespace MABEL_WOF_LITE\Code\Services
 
 			$response = self::request('lists/'.$list_id.'/members/'.md5(strtolower($email)),$data);
 
-			if(isset($response->status) && $response->status == 400)
-				return $response->detail;
+            if( empty( $response ) ) {
+                return __( 'Something went wrong contacting MailChimp.', 'wp-optin-wheel' );
+            }
+            
+			if( isset( $response->status ) && $response->status == 400 ) {
+                return $response->detail;
+            }
 
 			return true;
+            
 		}
 
 		public static function get_email_lists() {

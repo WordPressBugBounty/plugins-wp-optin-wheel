@@ -28,7 +28,7 @@ namespace MABEL_WOF_LITE\Code\Services {
                 @file_put_contents( $path . '/.htaccess', '<Files "'. $name.'.txt">' . PHP_EOL . 'Order Allow,Deny' . PHP_EOL . 'Deny from all' . PHP_EOL . '</Files>' . PHP_EOL .'Options -Indexes' );
             }
 
-            return $path . $name . '.txt'; 
+            return $path . $name . '.txt'; //'wof-log.txt';
 
         }
 
@@ -39,27 +39,51 @@ namespace MABEL_WOF_LITE\Code\Services {
             $new_path = self::create_dir();
 
             if( ! file_exists( $new_path ) && ( file_exists( $old_path ) || file_exists( $old_path_2 ) ) ) {
-                if( file_exists( $old_path ) ) rename($old_path, $new_path);
-                if( file_exists( $old_path_2 ) ) rename($old_path_2, $new_path);
+
+                global $wp_filesystem;
+
+                if ( empty( $wp_filesystem ) ) {
+                    require_once ABSPATH . 'wp-admin/includes/file.php';
+                    WP_Filesystem();
+                }
+                if( $wp_filesystem ) {
+                    if ( file_exists( $old_path ) ) $wp_filesystem->move( $old_path, $new_path );
+                    if ( file_exists( $old_path_2 ) ) $wp_filesystem->move( $old_path_2, $new_path );
+                }
             }
 
             return $new_path;
         }
 
-		public static function get_logs_from_email($email) {
+		public static function get_logs_from_email( $email ) {
+
+            global $wp_filesystem;
+
+            // Initialize the WP_Filesystem API if not already done
+            if ( empty( $wp_filesystem ) ) {
+                require_once ABSPATH . 'wp-admin/includes/file.php';
+                WP_Filesystem();
+            }
+
+            if( empty( $wp_filesystem ) ) {
+                return [];
+            }
+
             $file_url = self::switch_dir();
-			$matches = [];
-			$handle = @fopen($file_url, "r");
-			if ($handle)
-			{
-				while (!feof($handle))
-				{
-					$buffer = fgets($handle);
-					if(strpos($buffer, $email) !== FALSE)
-						$matches[] = $buffer;
-				}
-				fclose($handle);
-			}
+            $matches = [];
+
+            if ( $wp_filesystem->exists( $file_url ) ) {
+                $contents = $wp_filesystem->get_contents( $file_url );
+                if ($contents !== false) {
+                    $lines = explode("\n", $contents);
+                    foreach ( $lines as $line ) {
+                        if ( strpos( $line, $email ) !== false) {
+                            $matches[] = $line;
+                        }
+                    }
+                }
+            }
+            
 			return $matches;
 		}
 
@@ -89,12 +113,13 @@ namespace MABEL_WOF_LITE\Code\Services {
 		}
 
 		public static function is_in_log($email,$wheel_id) {
+            
 			global $wpdb;
 			$table = $wpdb->prefix.'wof_lite_optins';
 
 			$results = $wpdb->get_results(
 				$wpdb->prepare(
-					'SELECT email FROM '.$table.' WHERE email = %s AND wheel_id = %d',
+					"SELECT email FROM  {$table} WHERE email = %s AND wheel_id = %d",
 					hash('md5',$email),
 					$wheel_id
 				)

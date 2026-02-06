@@ -2,19 +2,18 @@
 Contributors: studiowombat,maartenbelmans
 Tags: optin, spin wheel, wheel, fortune, gamification
 Requires at least: 4.1
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 5.6
-Stable tag: 1.4.8
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Grow your sales and email list by offering your visitors a chance to win something a prize through spinning the wheel of fortune.
+Grow your sales and email list by offering your visitors a chance to win a prize through spinning the wheel of fortune.
 
 == Description ==
 
-Grow you email list or grow your sales by offering your visitors a chance to win a coupon, or other prize through spinning the wheel of fortune.
-Users have let us know their signup rate increased with 200% after installing our spin to win plugin! This plugin could be your
-new favorite email marketing.
+Grow your email list or grow your sales by offering your visitors a chance to win a coupon, or other prize through spinning the wheel of fortune.
+Users have let us know their signup rate increased with 200% after installing our spin to win plugin! This plugin could be your new favorite email marketing.
 
 * Beautiful predefined themes.
 * Capture emails into MailChimp.
@@ -42,18 +41,20 @@ new favorite email marketing.
 * Seasonal themes like Christmas & Halloween.
 * Full WooCommerce automatic coupon integration.
 * Form-builder: build any kind of opt-in form.
-* Shortcode to display the wheel in any post, page or widget (not as popup, but directly on the page).
+* Shortcode to display the wheel in any post, page, or widget.
+* Ability to have a fullscreen popup.
+* You can also display the wheel inside your content rather than as a popup.
 * Coupon settings such as duration, or restriction to product/category.
 * You can also offer a free gift.
 * You can also offer free shipping.
 * Compatible with WordPress, Zapier, Drip, Mailchimp, Campaign Monitor, ActiveCampaign, MailerLite, ConvertKit, Remarkety, GetResponse, Klaviyo, Mailster, SendInBlue, Newsletter2Go.
-* Extend functionality through Zapier.
-* Allow to check plays for fraud by checking plays per IP.
+* Extend functionality with webhooks through Zapier, Make, IFTTT, n8n,...
+* Allows checking players for fraud by checking email address or IP address.
 * Validate email addresses against known fake email domains.
-* WPML multi language compatible.
+* WPML multi-language compatible.
 * Beautiful widgets (pop outs or icons to click on to show the wheel).
 * Offer replays.
-* Design settings: choose a predefined theme or design your own.
+* Design settings: choose a predefined theme or completely design your own.
 * Show a coupon bar for increased urgency.
 * Show/hide on mobile.
 * Show/hide on certain pages.
@@ -88,6 +89,19 @@ Coming soon...
 
 == Changelog ==
 
+= 1.5.2 =
+ * Fix: fixed an issue with saving wheels in the backend when an older version of the plugin "WP Encryption" is active.
+ 
+= 1.5.1 =
+ * Fix: fixed the wheel activation toggle in the backend not saving.
+ 
+= 1.5 =
+ * Improvement: improved code for translations.
+ * Improvement: improved error handling when MailChimp sends back an error.
+ * Improvement: escape all output.
+ * Improvement: sanitize all values coming from user input.
+ * Fix: fixed an issue with the default disclaimer and explainer text not showing in the backend when creating a wheel.
+ 
 = 1.4.8 =
  * Improvement: validate MailChimp API key before saving (both frontend and backend).
  

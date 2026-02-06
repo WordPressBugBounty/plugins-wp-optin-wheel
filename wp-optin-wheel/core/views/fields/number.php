@@ -16,10 +16,14 @@ if(isset($option->pre_text)) {
 	class="<?php echo $has_pre_text ? '' : 'widefat'; ?> mabel-form-element"
 	style="<?php echo $has_pre_text? 'width:100px;' : ''; ?>"
 	type="number"
-	name="<?php echo $option->name === null ? $option->id : $option->name; ?>"
-	value="<?php if( ! empty( $option->value ) ) echo htmlspecialchars($option->value);?>"
-	<?php echo !empty($option->dependency) ? 'data-dependency="' . htmlspecialchars(json_encode($option->dependency,ENT_QUOTES)) . '"':''; ?>
-	<?php echo $option->get_extra_data_attributes(); ?>
+	name="<?php echo esc_attr( $option->name === null ? $option->id : $option->name ) ?>"
+	value="<?php if( ! empty( $option->value ) ) echo esc_attr($option->value) ?>"
+	<?php echo !empty($option->dependency) ? 'data-dependency="' . esc_attr(json_encode($option->dependency)) . '"':''; ?>
+	<?php
+    // Output is already properly escaped within the function.
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    echo $option->get_extra_data_attributes(); 
+    ?>
 />
 <?php
 

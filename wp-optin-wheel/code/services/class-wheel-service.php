@@ -31,18 +31,24 @@ namespace MABEL_WOF_LITE\Code\Services
 			]));
 		}
 
+		// pseq = previous sequence
 		public static function validate_sequence(Wheel_Model $wheel,$sequence, $psequence) {
 			$seq = explode('::',Helper_Service::decrypt($sequence));
 			$pseq = explode('::',Helper_Service::decrypt($psequence));
 			$current_play = intval($seq[1]);
 			$previous_play = intval($pseq[1]);
 
+			// Sizes of splitted arrays aren't correct
 			if(sizeof($seq) != 3 || sizeof($pseq) != 3) return false;
+			// the id's aren't correct in the sequence
 			if($wheel->id != $seq[0] || $wheel->id != $pseq[0]) return false;
+			// if previous sequence is equal to sequence and the play isn't the first (1)
 			if($current_play > 1 && $sequence === $psequence) return false;
 			if($previous_play > $current_play) return false;
+			// Previous & current can only be equal to eachother if it's the 1st game.
 			if($current_play === $previous_play && $current_play != 1) return false;
 
+			// make sure the previous play is correct and it's less than 20 minutes ago.
 			if($previous_play != $current_play) {
 				$time = intval($seq[2]);
 				if((time()-1505392740) - $time > 1200) return false;
@@ -51,22 +57,25 @@ namespace MABEL_WOF_LITE\Code\Services
 			return $current_play;
 		}
 
-		public static function calculate_segment_hit(Wheel_Model $wheel) {
-			$will_win = mt_rand(0,100) <= $wheel->winning_chance;
+		public static function calculate_segment_hit( Wheel_Model $wheel ) {
+            
+			$will_win = wp_rand(0,100) <= $wheel->winning_chance;
 
 			if(!$will_win){
 				$losing_segments = Enumerable::from($wheel->slices)->where(function($x){return $x->type == 0;})->toArray();
 				$losing_segment = $losing_segments[array_rand($losing_segments)];
 				return $losing_segment;
 			}else{
+				// user will win
 				$winning_segments = Enumerable::from($wheel->slices)->where(function($x){return $x->type != 0 && $x->chance != 0;})->toArray();
 
+				// Sort winning segments: lowest chance first.
 				usort($winning_segments, function($a,$b){
 					if($a->chance === $b->chance) return 0;
 					return (intval($a->chance) < intval($b->chance)) ? -1 : 1;
 				});
 
-				$rand = mt_rand(0, 100);
+				$rand = wp_rand(0, 100);
 
 				$cumul = 0;
 				foreach($winning_segments as $segment) {
@@ -75,11 +84,17 @@ namespace MABEL_WOF_LITE\Code\Services
 						return $segment;
 				}
 
+				// Should never be hit
 				return null;
 
 			}
 		}
 
+		/**
+		 * @param $raw
+		 *
+		 * @return \MABEL_WOF_LITE\Code\Models\Wheel_Model
+		 */
 		public static function raw_to_wheel($raw) {
 			$wheel = new Wheel_Model();
 			$options = $raw['options'];
@@ -111,6 +126,7 @@ namespace MABEL_WOF_LITE\Code\Services
 			if(!empty($options->list))
 				$wheel->list = $options->list;
 			else{
+				// legacy, pre v1.1.3
 				if(!empty($options->mailchimp_list))
 					$wheel->list = $options->mailchimp_list;
 				if(!empty($options->cm_list))
@@ -152,12 +168,17 @@ namespace MABEL_WOF_LITE\Code\Services
 		}
 
 		public static function toggle_activation($id, $toggle) {
-			wp_update_post( [
+            wp_update_post( [
 				'ID' => $id,
 				'post_status' => $toggle == 1 ? 'publish' : 'draft'
 			] );
 		}
 
+		/**
+		 * @param $id
+		 *
+		 * @return \MABEL_WOF_LITE\Code\Models\Wheel_Model
+		 */
 		public static function get_wheel($id) {
 			$post = get_post($id);
 
@@ -169,6 +190,9 @@ namespace MABEL_WOF_LITE\Code\Services
 			return self::raw_to_wheel($wheel);
 		}
 
+		/**
+		 * @return Wheel_Model[]
+		 */
 		public static function get_all_wheels() {
 
 			$post_ids = new \WP_Query( [

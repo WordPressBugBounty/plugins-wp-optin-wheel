@@ -3,19 +3,23 @@
 if(!defined('ABSPATH')){die;}
 $id = $option->name === null ? $option->id : $option->name;
 ?>
-<div class="mabel-mc-wrapper" data-id="<?php echo $id; ?>">
+<div class="mabel-mc-wrapper" data-id="<?php echo esc_attr( $id ) ?>">
 
 	<input
 		type="hidden"
-		name="<?php echo $id; ?>"
-		value="<?php echo $option->values_to_key_list(); ?>"
+		name="<?php echo esc_attr( $id ) ?>"
+		value="<?php echo esc_attr( $option->values_to_key_list() ) ?>"
 		class="mabel-formm-element"
-		<?php echo $option->get_extra_data_attributes(); ?>
+		<?php
+        // Output is already properly escaped within the function.
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $option->get_extra_data_attributes();
+        ?>
 	/>
 
 	<div class="mabel-mc-chosen">
 		<em class="infotext" style="<?php if(!empty($option->value)) echo 'display:none'; ?>">
-			<?php _e("Choose from the items below", \MABEL_WOF_LITE\Core\Common\Managers\Config_Manager::$slug); ?>
+			<?php esc_html_e("Choose from the items below", 'wp-optin-wheel' ); ?>
 		</em>
 
 	</div>
@@ -24,9 +28,9 @@ $id = $option->name === null ? $option->id : $option->name;
 
 		<?php
 			foreach($option->possible_values as $title => $options){
-				echo '<span class="mabel-mc-title">'.$title.'</span>';
+				echo '<span class="mabel-mc-title">' . wp_kses_post( $title ) . '</span>';
 				foreach($options as $key => $value) {
-					echo '<span class="mabel-mc-option" data-id="'.$key.'">'.(empty($value) ? 'n/a' : $value).'</span>';
+					echo '<span class="mabel-mc-option" data-id="' . esc_attr( $key ) . '">' . ( empty($value) ? 'n/a' : wp_kses_post( $value) ) . '</span>';
 				}
 			}
 		?>
@@ -35,5 +39,5 @@ $id = $option->name === null ? $option->id : $option->name;
 
 <?php
 if(isset($option->extra_info))
-	echo '<div class="p-t-1 extra-info">' . esc_html($option->extra_info) .'</div>';
+	echo '<div class="p-t-1 extra-info">' . wp_kses_post( $option->extra_info ) .'</div>';
 ?>

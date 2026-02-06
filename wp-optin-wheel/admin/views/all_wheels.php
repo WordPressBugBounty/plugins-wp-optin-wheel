@@ -1,11 +1,11 @@
 <div class="wof-nonce" data-nonce="<?php echo esc_attr(wp_create_nonce('wof_data_nonce')) ?>"></div>
 <div class="wof-all-wheels-wrapper">
-	<span class="wof-no-results" style="display:inline-block;padding-bottom: 20px;"><?php _e("You didn't create any wheels yet.", \MABEL_WOF_LITE\Core\Common\Managers\Config_Manager::$slug); ?></span>
+	<span class="wof-no-results" style="display:inline-block;padding-bottom: 20px;"><?php esc_html_e("You didn't create any wheels yet.", 'wp-optin-wheel' ); ?></span>
 
 	<div class="wof-wheels-list"></div>
 
 	<div class="pro-option-teaser">
-		<b>Need statistics?</b> Views & optin statistics are available in the premium version.
+        <?php echo wp_kses_post( __( '<b>Need statistics?</b> Views & optin statistics are available in the Pro version.', 'wp-optin-wheel' ) ) ?>
 	</div>
 </div>
 
@@ -24,7 +24,7 @@
 		</div>
 		<div class="tile-footer">
 			<div>
-				<?php _e('Active', \MABEL_WOF_LITE\Core\Common\Managers\Config_Manager::$slug) ?> <input type="checkbox" name="active" {{! (value.active == 1) ? ' checked="checked" ' : '' }} class="skip-save wof-toggle-active" data-wheel="{{=value.id}}" />
+				<?php esc_html_e( 'Active', 'wp-optin-wheel' ) ?> <input type="checkbox" name="active" {{! (value.active == 1) ? ' checked="checked" ' : '' }} class="skip-save wof-toggle-active" data-wheel="{{=value.id}}" />
 			</div>
 			<ul>
 				<li>

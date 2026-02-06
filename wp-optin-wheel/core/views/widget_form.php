@@ -10,7 +10,7 @@
 		{
 			/** @var \MABEL_WOF_LITE\Core\Models\Option $option */
 			echo '<p>';
-				echo '<label>' .$option->title. '</label>';
+				echo '<label>' . wp_kses_post( $option->title ) . '</label>';
 				echo '<div>';
 					$option_manager->display_field( ['option' => $option] );
 				echo '</div>';

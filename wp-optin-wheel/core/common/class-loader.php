@@ -81,14 +81,14 @@ namespace MABEL_WOF_LITE\Core\Common
 
 			foreach ( $this->filters as $hook ) {
 				if(! method_exists($hook['component'],$hook['callback'])){
-					throw new \Exception("Can't add filter. Method ". $hook['callback'] . " doesn't exist.");
+					throw new \Exception("Can't add filter. Method doesn't exist.");
 				}
 				add_filter( $hook['hook'], ($hook['component'] === null? $hook['callback'] : [ $hook['component'], $hook['callback'] ]), $hook['priority'], $hook['accepted_args'] );
 			}
 
 			foreach ( $this->actions as $hook ) {
 				if(! method_exists($hook['component'],$hook['callback'])){
-					throw new \Exception("Can't add action. Method ". $hook['callback'] . "doesn't exist.");
+					throw new \Exception("Can't add action. Method doesn't exist.");
 				}
 				add_action( $hook['hook'], ($hook['component'] === null? $hook['callback'] : [ $hook['component'], $hook['callback'] ]), $hook['priority'], $hook['accepted_args'] );
 			}

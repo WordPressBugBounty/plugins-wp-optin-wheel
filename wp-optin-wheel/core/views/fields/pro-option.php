@@ -3,5 +3,5 @@
 ?>
 
 <div class="pro-option-teaser">
-	<?php echo $option->value? $option->value : __("This option is available in the premium version.", \MABEL_WOF_LITE\Core\Common\Managers\Config_Manager::$slug); ?>
+	<?php echo $option->value ? wp_kses_post( $option->value ) : esc_html( 'This option is available in the Pro version.', 'wp-optin-wheel' ); ?>
 </div>

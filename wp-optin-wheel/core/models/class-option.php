@@ -43,7 +43,7 @@ namespace MABEL_WOF_LITE\Core\Models
 
 		public function get_extra_data_attributes(){
 			return join(' ', Enumerable::from($this->data_attributes)->select(function($v,$k){
-				return 'data-'.$k.'="'.$v.'"';
+				return 'data-'.$k.'="'. esc_attr( $v ).'"';
 			})->toArray());
 		}
 

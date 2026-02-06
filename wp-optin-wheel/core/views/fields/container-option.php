@@ -4,10 +4,10 @@
 ?>
 <div
 	class="mabel-accordion mabel-form-element"
-	name="<?php echo $option->name === null ? $option->id : $option->name; ?>"
-	<?php echo !empty($option->dependency) ? 'data-dependency="' . htmlspecialchars(json_encode($option->dependency,ENT_QUOTES)) . '"':''; ?>
+	name="<?php echo esc_attr( $option->name === null ? $option->id : $option->name ) ?>"
+	<?php echo !empty($option->dependency) ? 'data-dependency="' . esc_attr(json_encode($option->dependency)) . '"':''; ?>
 >
-	<button class="mabel-accordion-btn"><?php echo $option->button_text; ?></button>
+	<button class="mabel-accordion-btn"><?php echo esc_html( $option->button_text ) ?></button>
 	<div style="display: none;">
 		<table class="form-table">
 			<?php
@@ -15,9 +15,9 @@
 				{
 					echo '<tr>';
 					if(!empty($o->title))
-						echo '<th scope="row">'.$o->title.'</th>';
+						echo '<th scope="row">' . wp_kses_post( $o->title ) . '</th>';
 					echo '<td '.(empty($o->title) ? 'colspan="2"' : '').'>';
-						Html::option($o);
+						Html::option( $o );
 					echo '</td>';
 				}
 			?>

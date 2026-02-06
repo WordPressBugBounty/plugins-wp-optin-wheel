@@ -77,13 +77,13 @@ namespace MABEL_WOF_LITE\Code\Models {
 		public function data_attributes() {
 
 			$elements = [
-				'id' => $this->id,
+				'id' => esc_attr( $this->id ),
 				'options' => esc_attr($this->get_options_for_frontend()),
 				'fields' => esc_attr(json_encode($this->fields))
 			];
 
 			return join(' ', Enumerable::from($elements)->select(function($v,$k){
-				return 'data-'.$k .'="'.esc_attr($v) .'"';
+				return 'data-' . $k . '="' . $v . '"';
 			})->toArray());
 		}
 
@@ -95,13 +95,16 @@ namespace MABEL_WOF_LITE\Code\Models {
 			return $this->has_setting($key) ? $this->{$key} : $default;
 		}
 
-		public function get_background(){
+		public function get_background() {
+            
 			$url = Config_Manager::$url . 'public/img/';
-			switch($this->bgpattern){
+            
+			switch( $this->bgpattern ) {
 				case 'hearts':
-					return 'background-image:url(\''.$url.'bg-hearts.png\');opacity:.085;background-size:11%;';
+					return 'background-image:url(\'' . esc_url( $url ) . 'bg-hearts.png\');opacity:.085;background-size:11%;';
 				default: return '';
 			}
+            
 		}
 
 	}

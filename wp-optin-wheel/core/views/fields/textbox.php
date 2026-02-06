@@ -12,20 +12,28 @@ if(!defined('ABSPATH')){
 	<input
 		class="widefat mabel-form-element"
 		type="text"
-		name="<?php echo $option->name === null ? $option->id : $option->name; ?>"
-		value="<?php if( ! empty( $option->value ) ) echo htmlspecialchars($option->value);?>"
-		placeholder="<?php echo $option->placeholder; ?>"
-	    <?php echo !empty($option->dependency) ? 'data-dependency="' . htmlspecialchars(json_encode($option->dependency,ENT_QUOTES)) . '"':''; ?>
-		<?php echo $option->get_extra_data_attributes(); ?>
+		name="<?php echo esc_attr( $option->name === null ? $option->id : $option->name ) ?>"
+		value="<?php if( ! empty( $option->value ) ) echo esc_attr($option->value) ?>"
+		placeholder="<?php echo esc_attr( $option->placeholder ) ?>"
+	    <?php echo !empty($option->dependency) ? 'data-dependency="' . esc_attr(json_encode($option->dependency)) . '"':''; ?>
+		<?php
+        // Output is already properly escaped within the function.
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $option->get_extra_data_attributes(); 
+        ?>
 	/>
 <?php }else { ?>
 	<textarea
 		class="widefat mabel-form-element"
-		name="<?php echo $option->name === null ? $option->id : $option->name; ?>"
-		placeholder="<?php echo $option->placeholder; ?>"
-		<?php echo !empty($option->dependency) ? 'data-dependency="' . htmlspecialchars(json_encode($option->dependency,ENT_QUOTES)) . '"':''; ?>
-		<?php echo $option->get_extra_data_attributes(); ?>
-	><?php if( ! empty( $option->value ) ) echo htmlspecialchars($option->value);?></textarea>
+		name="<?php echo esc_attr( $option->name === null ? $option->id : $option->name ) ?>"
+		placeholder="<?php echo esc_attr( $option->placeholder ) ?>"
+		<?php echo ! empty($option->dependency) ? 'data-dependency="' . esc_attr(json_encode($option->dependency)) . '"':''; ?>
+		<?php
+        // Output is already properly escaped within the function.
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $option->get_extra_data_attributes();
+        ?>
+	><?php if( ! empty( $option->value ) ) echo esc_attr($option->value);?></textarea>
 <?php
 }
 	$option->display_help();

@@ -5,8 +5,7 @@ namespace MABEL_WOF_LITE\Core\Common
 	use MABEL_WOF_LITE\Core\Common\Managers\Config_Manager;
 	use MABEL_WOF_LITE\Core\Common\Managers\Options_Manager;
 	use MABEL_WOF_LITE\Core\Models\Start_VM;
-
-
+    
 	abstract class Admin extends Presentation_Base
 	{
 		public $options_manager;
@@ -45,7 +44,7 @@ namespace MABEL_WOF_LITE\Core\Common
 			$notices = self::$notices;
 
 			foreach( $notices as $notice ) {
-				echo '<div class="notice is-dismissible notice-'.$notice['class'].'"><p>'.$notice['message'].'</p></div>';
+				echo '<div class="notice is-dismissible notice-' . esc_attr( $notice['class'] ) . '"><p>' . esc_html( $notice['message'] ) . '</p></div>';
 			}
 
 		}
@@ -55,7 +54,7 @@ namespace MABEL_WOF_LITE\Core\Common
 		public function add_settings_link( $links )
 		{
 			$my_links = [
-				'<a href="' . admin_url( 'options-general.php?page=' .Config_Manager::$slug ) . '">' .__('Settings' , Config_Manager::$slug). '</a>',
+				'<a href="' . admin_url( 'options-general.php?page=' .Config_Manager::$slug ) . '">' .__('Settings' , 'wp-optin-wheel' ). '</a>',
 			];
 			return array_merge( $links, $my_links );
 		}
@@ -95,6 +94,7 @@ namespace MABEL_WOF_LITE\Core\Common
 
 			ob_start();
 			include Config_Manager::$dir . 'core/views/start.php';
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo ob_get_clean();
 		}
 

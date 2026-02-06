@@ -41,33 +41,35 @@ namespace MABEL_WOF_LITE\Code\Controllers
 			$this->add_ajax_function('wof-lite-email-optin', $this, 'add_email_to_list',true, true);
 			$this->add_ajax_function('wof-lite-play', $this, 'play',true, true);
 
+            // Exclude from WP Rocket's "Automatic Lazy Rendering" feature as that gives problems.
             add_filter( 'rocket_lrc_exclusions', function( $exclusions ) {
                 $exclusions[] = 'wof-wheels';
                 return $exclusions;
             } );
         }
 
-		public function play($wheel) {
-			if(!isset($_POST['nonce']) || !isset($_POST['id']) || !isset($_POST['action']) ||
-			   !isset($_POST['seq']) || !isset($_POST['pseq']) )
-				wp_send_json_error(__('Not allowed.',Config_Manager::$slug));
+		public function play( $wheel ) {
 
-			if(empty($wheel))
-				$wheel = Wheel_service::get_wheel($_POST['id']);
+			if( empty( $_POST['nonce'] ) || empty( $_POST['id'] ) || empty( $_POST['action'] ) ||
+			   empty( $_POST['seq'] ) || empty( $_POST['pseq'] ) )
+				wp_send_json_error( __('Not allowed.', 'wp-optin-wheel' ) );
 
-			$current_play = Wheel_service::validate_sequence($wheel, $_POST['seq'], $_POST['pseq']);
+			if( empty( $wheel ) )
+				$wheel = Wheel_service::get_wheel( sanitize_text_field( wp_unslash( $_POST['id'] ) ) );
+
+			$current_play = Wheel_service::validate_sequence( $wheel, sanitize_text_field( wp_unslash( $_POST['seq'] ) ),  sanitize_text_field( wp_unslash( $_POST['pseq'] ) ) );
 
 			if(!is_int($current_play))
-				wp_send_json_error(__('Not allowed.',Config_Manager::$slug));
+				wp_send_json_error( __('Not allowed.', 'wp-optin-wheel' ) );
 
-			$segment = Wheel_service::calculate_segment_hit($wheel);
+			$segment = Wheel_service::calculate_segment_hit( $wheel );
 
 			$winning = $segment->type != 0;
 			$is_last = true;
 
 			if(Settings_Manager::get_setting('log') === true)
 				Log_Service::log( sprintf('%s turned wheel %d, and landed on segment %d. They %s.%s',
-					$_POST['mail'],
+					sanitize_text_field( wp_unslash( $_POST['mail'] ) ),
 					$wheel->id,
 					$segment->id,
 					$winning? 'won' : 'lost',
@@ -86,21 +88,23 @@ namespace MABEL_WOF_LITE\Code\Controllers
 		}
 
 		public function add_email_to_list() {
+
 			if(!isset($_POST['nonce']) || !isset($_POST['id']) || !isset($_POST['mail']) ||
 			    !isset($_POST['seq']) || !isset($_POST['pseq']) )
-				wp_send_json_error(__('Not allowed.',Config_Manager::$slug));
+				wp_send_json_error( __('Not allowed.', 'wp-optin-wheel' ) );
 
-			$email = sanitize_email($_POST['mail']);
-			if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-				wp_send_json_error(__('Badly formatted email.', Config_Manager::$slug));
+			$email = sanitize_email( wp_unslash( $_POST['mail'] ) );
 
-			$wheel = Wheel_service::get_wheel($_POST['id']);
+			if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) )
+				wp_send_json_error( __( 'Badly formatted email.', 'wp-optin-wheel' ) );
+
+			$wheel = Wheel_service::get_wheel( sanitize_text_field( wp_unslash( $_POST['id'] ) ) );
 
 			if(Log_Service::is_in_log($email,$wheel->id)){
-				wp_send_json_error(__("Email already used", Config_Manager::$slug));
+				wp_send_json_error( __("Email already used", 'wp-optin-wheel' ) );
 			}
-
-			$fields = isset($_POST['fields']) ? json_decode(sanitize_text_field(stripslashes($_POST['fields']))) : [];
+            
+			$fields = isset( $_POST['fields'] ) ? json_decode( sanitize_text_field( wp_unslash( $_POST['fields'] ) ) ) : [];
 
 			$should_optin = true;
 			$response = null;
@@ -122,6 +126,7 @@ namespace MABEL_WOF_LITE\Code\Controllers
 			}
 
 			if($should_optin) {
+				// Remove fields that are not from the provider (but from the frontend)
 				$fieldsForProvider = Enumerable::from( $fields )->where( function ( $x ) {
 					return $x->type !== 'consent_checkbox';
 				} )->toArray();
@@ -133,8 +138,8 @@ namespace MABEL_WOF_LITE\Code\Controllers
 				}
 			}
 
-			if(is_string($response))
-				wp_send_json_error(__($response, Config_Manager::$slug));
+			if( is_string( $response ) )
+				wp_send_json_error( $response );
 
 			if(Settings_Manager::get_setting('log') === true)
 				Log_Service::log($email.' opted into wheel '.$wheel->id.(!$should_optin ? '. They chose not to opt in to your list': ''));
@@ -147,8 +152,10 @@ namespace MABEL_WOF_LITE\Code\Controllers
 		public function add_wheels() {
 			$model = new Wheels_VM();
 			$model->wheels = $this->get_active_wheels();
+
 			if(count($model->wheels) > 0 && !wp_style_is(Config_Manager::$slug,'enqueued'))
 				wp_enqueue_style(Config_Manager::$slug);
+
 			foreach($model->wheels as $wheel) {
 				$handle = 'wof-theme-'.$wheel->theme;
 				if(!wp_style_is($handle,'enqueued'))
@@ -160,12 +167,12 @@ namespace MABEL_WOF_LITE\Code\Controllers
 
 		private function get_segment_title(Wheel_Model $wheel, $segment) {
 			if($segment->type == 0)
-				return $wheel->has_setting('losing_title') ? $wheel->losing_title : __('Uh oh!', Config_Manager::$slug);
+				return $wheel->has_setting('losing_title') ? $wheel->losing_title : __( 'Uh oh!', 'wp-optin-wheel' );
 
 			return str_replace(
 				'{x}',
 				'<em>'.$segment->label.'</em>',
-				$wheel->has_setting('winning_title')? $wheel->winning_title : __('Hurray!', Config_Manager::$slug)
+				$wheel->has_setting('winning_title')? $wheel->winning_title : __( 'Hurray!', 'wp-optin-wheel' )
 			);
 		}
 

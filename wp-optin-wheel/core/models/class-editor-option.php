@@ -23,7 +23,7 @@ namespace MABEL_WOF_LITE\Core\Models {
 
 		public function edit_wp_editor($markup) {
 			if (stripos($markup, 'id="'.$this->name == null? $this->id : $this->name.'"') !== false) {
-				$markup = str_replace('<textarea', '<textarea data-dependency="'.htmlspecialchars(json_encode( empty( $this->dependency ) ? '' : $this->dependency,ENT_QUOTES)).'"', $markup);
+				$markup = str_replace('<textarea', '<textarea data-dependency="'. esc_attr( json_encode( empty( $this->dependency ) ? '' : $this->dependency ) ).'"', $markup);
 			}
 			return $markup;
 		}
