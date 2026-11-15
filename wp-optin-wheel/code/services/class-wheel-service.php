@@ -35,11 +35,12 @@ namespace MABEL_WOF_LITE\Code\Services
 		public static function validate_sequence(Wheel_Model $wheel,$sequence, $psequence) {
 			$seq = explode('::',Helper_Service::decrypt($sequence));
 			$pseq = explode('::',Helper_Service::decrypt($psequence));
-			$current_play = intval($seq[1]);
-			$previous_play = intval($pseq[1]);
 
 			// Sizes of splitted arrays aren't correct
 			if(sizeof($seq) != 3 || sizeof($pseq) != 3) return false;
+
+			$current_play = intval($seq[1]);
+			$previous_play = intval($pseq[1]);
 			// the id's aren't correct in the sequence
 			if($wheel->id != $seq[0] || $wheel->id != $pseq[0]) return false;
 			// if previous sequence is equal to sequence and the play isn't the first (1)
@@ -57,37 +58,46 @@ namespace MABEL_WOF_LITE\Code\Services
 			return $current_play;
 		}
 
+		private static function pick_losing_segment( $segments ) {
+			$losing_segments = Enumerable::from($segments)->where(function($x){return $x->type == 0;})->toArray();
+
+			// Wheel without losing slices: pick any slice so we never return null.
+			if( empty( $losing_segments ) )
+				$losing_segments = $segments;
+
+			return $losing_segments[ array_rand( $losing_segments ) ];
+		}
+
+		// Random float in [0, $max). Works for int and float chances (wp_rand() alone only takes ints).
+		private static function random_float( $max ) {
+			return wp_rand() / ( 4294967295 + 1 ) * $max; // wp_rand() max is 4294967295.
+		}
+
 		public static function calculate_segment_hit( Wheel_Model $wheel ) {
-            
-			$will_win = wp_rand(0,100) <= $wheel->winning_chance;
 
-			if(!$will_win){
-				$losing_segments = Enumerable::from($wheel->slices)->where(function($x){return $x->type == 0;})->toArray();
-				$losing_segment = $losing_segments[array_rand($losing_segments)];
-				return $losing_segment;
-			}else{
-				// user will win
-				$winning_segments = Enumerable::from($wheel->slices)->where(function($x){return $x->type != 0 && $x->chance != 0;})->toArray();
+			$will_win = self::random_float( 100 ) < floatval( $wheel->winning_chance ); // 0% never wins, 100% always wins.
 
-				// Sort winning segments: lowest chance first.
-				usort($winning_segments, function($a,$b){
-					if($a->chance === $b->chance) return 0;
-					return (intval($a->chance) < intval($b->chance)) ? -1 : 1;
-				});
+			$winning_segments = Enumerable::from($wheel->slices)->where(function($x){return $x->type != 0 && floatval($x->chance) > 0;})->toArray();
 
-				$rand = wp_rand(0, 100);
+			// No winning slices: you lose.
+			if( ! $will_win || empty( $winning_segments ) )
+				return self::pick_losing_segment( $wheel->slices );
 
-				$cumul = 0;
-				foreach($winning_segments as $segment) {
-					$cumul += intval($segment->chance);
-					if($rand < $cumul)
-						return $segment;
-				}
+			// Roll against the real total, so chances that don't add up to 100 can't fall through to null.
+			$total = 0;
+			foreach( $winning_segments as $segment )
+				$total += floatval( $segment->chance );
 
-				// Should never be hit
-				return null;
-
+			$rand = self::random_float( $total );
+			$cumul = 0;
+			foreach( $winning_segments as $segment ) {
+				$cumul += floatval( $segment->chance );
+				if( $rand < $cumul )
+					return $segment;
 			}
+
+			// Float rounding on the last slice.
+			return end( $winning_segments );
 		}
 
 		/**
@@ -167,7 +177,14 @@ namespace MABEL_WOF_LITE\Code\Services
 			return $wheel;
 		}
 
+		public static function is_wheel( $id ) {
+			return ! empty( $id ) && get_post_type( $id ) === self::$post_type;
+		}
+
 		public static function toggle_activation($id, $toggle) {
+			if( ! self::is_wheel( $id ) )
+				return;
+
             wp_update_post( [
 				'ID' => $id,
 				'post_status' => $toggle == 1 ? 'publish' : 'draft'
@@ -177,9 +194,12 @@ namespace MABEL_WOF_LITE\Code\Services
 		/**
 		 * @param $id
 		 *
-		 * @return \MABEL_WOF_LITE\Code\Models\Wheel_Model
+		 * @return \MABEL_WOF_LITE\Code\Models\Wheel_Model|null
 		 */
 		public static function get_wheel($id) {
+			if( ! self::is_wheel( $id ) )
+				return null;
+
 			$post = get_post($id);
 
 			$wheel = [
@@ -232,6 +252,9 @@ namespace MABEL_WOF_LITE\Code\Services
 		}
 
 		public static function edit_wheel($id,$data) {
+			if( ! self::is_wheel( $id ) )
+				return;
+
 			update_post_meta($id,'options', $data);
 		}
 

@@ -2,9 +2,9 @@
 Contributors: studiowombat,maartenbelmans
 Tags: optin, spin wheel, wheel, fortune, gamification
 Requires at least: 4.1
-Tested up to: 6.9
-Requires PHP: 5.6
-Stable tag: 1.5.2
+Tested up to: 7.2
+Requires PHP: 7.1
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,15 @@ Coming soon...
 4. Settings screen in the WP admin.
 
 == Changelog ==
+
+= 1.5.3 =
+ * Improvement: stricter validation of wheel IDs and spin requests.
+ * Improvement: admin images now use WebP for faster loading.
+ * Improvement: security improvement: the wheel can no longer be spun without opting in.
+ * Fix: a winning spin could sometimes fail with an error.
+ * Fix: uninstalling the plugin now also removes the wheels from the database.
+ * Fix: the same email address with different capital letters could be used to spin the wheel twice.
+ * Other: updated minimum PHP version to 7.1.
 
 = 1.5.2 =
  * Fix: fixed an issue with saving wheels in the backend when an older version of the plugin "WP Encryption" is active.

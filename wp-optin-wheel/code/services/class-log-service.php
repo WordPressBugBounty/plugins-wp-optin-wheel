@@ -120,7 +120,7 @@ namespace MABEL_WOF_LITE\Code\Services {
 			$results = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT email FROM  {$table} WHERE email = %s AND wheel_id = %d",
-					hash('md5',$email),
+					hash('md5',strtolower($email)), // Lowercase so "A@x.com" and "a@x.com" count as the same email.
 					$wheel_id
 				)
 			);
@@ -133,7 +133,7 @@ namespace MABEL_WOF_LITE\Code\Services {
 			$table = $wpdb->prefix.'wof_lite_optins';
 			$wpdb->insert(
 				$table,
-				[ 'wheel_id' => $wheel_id, 'email' => hash('md5',$email),'created_date' => current_time('Y-m-d H:i:s',true) ]
+				[ 'wheel_id' => $wheel_id, 'email' => hash('md5',strtolower($email)),'created_date' => current_time('Y-m-d H:i:s',true) ]
 			);
 		}
 

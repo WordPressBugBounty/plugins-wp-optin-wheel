@@ -152,7 +152,7 @@ namespace MABEL_WOF_LITE
 		}
 
 		function register_post_type() {
-			register_post_type('wof_wheel', [
+			register_post_type('wof_lite_wheel', [
 				'public' => false,
 				'exclude_from_search' => true,
 				'publicly_queryable' => false,

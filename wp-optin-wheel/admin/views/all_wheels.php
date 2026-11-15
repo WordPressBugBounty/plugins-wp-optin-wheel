@@ -13,7 +13,7 @@
 <script id="tpl-wof-wheels-list" type="text/x-dot-template">
 	{{~ it.wheels :value}}
 	<div data-id="{{=value.id}}" class="image-tile">
-		<div class="tile-header" style="background-image: url('<?php echo esc_attr($data['base_url']) ?>/admin/img/wheel-{{=value.theme}}.png')">
+		<div class="tile-header" style="background-image: url('<?php echo esc_attr($data['base_url']) ?>/admin/img/wheel-{{=value.theme}}.webp')">
 			<span class="tag-id">
 				{{? value.name}}
 					{{=value.name}} ({{=value.id}})

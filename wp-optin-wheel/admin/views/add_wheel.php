@@ -31,7 +31,7 @@
 							<div class="wof-theme">
 								<div><?php echo esc_html($title) ?></div>
 								<label for="wof-theme-<?php echo esc_attr($id) ?>">
-									<img src="<?php echo esc_attr($data['base_url'].'/admin/img/wheel-'.$id.'.png') ?>" />
+									<img src="<?php echo esc_attr($data['base_url'].'/admin/img/wheel-'.$id.'.webp') ?>" />
 								</label>
 								<input class="skip-save" <?php echo $id === 'vintage'?'checked':''; ?> name="wof-wheel-theme" type="radio" value="<?php echo esc_attr($id) ?>" id="wof-theme-<?php echo esc_attr($id) ?>" />
 							</div>
@@ -41,13 +41,13 @@
 					<div class="pro-option-teaser">
 						<div style="padding-bottom: 15px;text-align: center;"><?php echo wp_kses_post( __( '<b>Build your own theme in Pro </b> and give each slice any color your like. You can also pick from more pre-built themes (including <b>seasonal</b> themes like "Christmas").', 'wp-optin-wheel' ) ) ?></div>
 						<div class="wof-theme">
-							<img src="<?php echo esc_attr($data['base_url']).'/admin/img/wheel-black-and-white.png' ?>" />
+							<img src="<?php echo esc_attr($data['base_url']).'/admin/img/wheel-black-and-white.webp' ?>" />
 						</div>
 						<div class="wof-theme">
-							<img src="<?php echo esc_attr($data['base_url']).'/admin/img/wheel-alt-blue.png' ?>" />
+							<img src="<?php echo esc_attr($data['base_url']).'/admin/img/wheel-alt-blue.webp' ?>" />
 						</div>
 						<div class="wof-theme">
-							<img src="<?php echo esc_attr($data['base_url']).'/admin/img/wheel-blue.png' ?>" />
+							<img src="<?php echo esc_attr($data['base_url']).'/admin/img/wheel-blue.webp' ?>" />
 						</div>
 					</div>
 				</div>

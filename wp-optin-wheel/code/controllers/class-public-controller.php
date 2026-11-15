@@ -38,8 +38,9 @@ namespace MABEL_WOF_LITE\Code\Controllers
 
 			add_action('wp_footer', [ $this,'add_wheels' ], 1);
 
+			// No public "play" endpoint: Lite has 1 play, which add_email_to_list() runs after the optin.
+			// A public endpoint allowed unlimited spins without an email.
 			$this->add_ajax_function('wof-lite-email-optin', $this, 'add_email_to_list',true, true);
-			$this->add_ajax_function('wof-lite-play', $this, 'play',true, true);
 
             // Exclude from WP Rocket's "Automatic Lazy Rendering" feature as that gives problems.
             add_filter( 'rocket_lrc_exclusions', function( $exclusions ) {
@@ -99,6 +100,9 @@ namespace MABEL_WOF_LITE\Code\Controllers
 				wp_send_json_error( __( 'Badly formatted email.', 'wp-optin-wheel' ) );
 
 			$wheel = Wheel_service::get_wheel( sanitize_text_field( wp_unslash( $_POST['id'] ) ) );
+
+			if( empty( $wheel ) )
+				wp_send_json_error( __( 'Not allowed.', 'wp-optin-wheel' ) );
 
 			if(Log_Service::is_in_log($email,$wheel->id)){
 				wp_send_json_error( __("Email already used", 'wp-optin-wheel' ) );
