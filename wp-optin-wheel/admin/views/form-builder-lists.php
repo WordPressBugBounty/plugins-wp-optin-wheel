@@ -54,12 +54,12 @@
 
 <script id="tpl-wof-field-builder-lists-row" type="text/x-dot-template">
 	{{~ it.fields :field:index}}
-	<tr class="form-field-tr" data-field-type="{{=field.type}}" data-field-id="{{=field.id}}" data-options="{{? field.options}}{{=JSON.stringify(field.options)}}{{?}}">
+	<tr class="form-field-tr" data-field-type="{{!field.type}}" data-field-id="{{!field.id}}" data-options="{{? field.options}}{{!JSON.stringify(field.options)}}{{?}}">
 		<td class="builder-small-col">
 			<input {{? field.checked}}checked="checked"{{?}} class="field-include" type="checkbox" />
 		</td>
 		<td>
-			{{=field.title}}
+			{{!field.title}}
 		</td>
 		<td>
 			<input class="widefat" value="{{!field.placeholder}}" type="text" placeholder="Your label">

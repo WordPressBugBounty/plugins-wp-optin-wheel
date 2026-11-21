@@ -3,7 +3,7 @@
  * Plugin Name: WP Optin Wheel - Gamified Optin Email Marketing Tool for WordPress and WooCommerce
  * Plugin URI: https://studiowombat.com/plugin/wheel-of-fortune/?utm_source=woffree&utm_medium=plugin&utm_campaign=plugins
  * Description: Gamified optin popup to grow your email list, with exit-intent. Woocommerce compatible.
- * Version: 1.5.3
+ * Version: 1.5.4
  * Author: StudioWombat
  * Author URI: https://studiowombat.com/?utm_source=woffree&utm_medium=plugin&utm_campaign=plugins
  * Text Domain: wp-optin-wheel
@@ -43,7 +43,7 @@ function run_MABEL_WOF_LITE()
 		plugin_dir_url( __FILE__ ),
 		plugin_basename( __FILE__ ),
 		'WP Optin Wheel',
-		'1.5.3',
+		'1.5.4',
 		'mb-wof-lite-settings'
 	);
 	$plugin->run();

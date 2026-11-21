@@ -4,7 +4,7 @@ Tags: optin, spin wheel, wheel, fortune, gamification
 Requires at least: 4.1
 Tested up to: 7.2
 Requires PHP: 7.1
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,11 @@ Coming soon...
 4. Settings screen in the WP admin.
 
 == Changelog ==
+
+= 1.5.4 =
+ * Security: wheels can no longer be created or edited by non-admin users via XML-RPC or the REST API.
+ * Security: form fields are now sanitized when saving a wheel.
+ * Security: improved output escaping in the admin wheel list, form builder and consent checkbox label.
 
 = 1.5.3 =
  * Improvement: stricter validation of wheel IDs and spin requests.

@@ -12,7 +12,8 @@ namespace MABEL_WOF_LITE\Code\Services
 		private static $allow_html_minimal = [
 			'a' => [
 				'href' => [],
-				'title' => []
+				'title' => [],
+				'target' => []
 			],
 			'b' => [],
 			'em' => [],
@@ -22,6 +23,32 @@ namespace MABEL_WOF_LITE\Code\Services
 			'ul' => [],
 			'li' => []
 		];
+
+		/**
+		 * Sanitize form builder fields. Placeholders end up as HTML on the frontend (consent checkbox label).
+		 * @param array $fields
+		 * @return array
+		 */
+		public static function sanitize_fields( $fields ) {
+			if( ! is_array( $fields ) )
+				return [];
+
+			$sanitized = [];
+
+			foreach( $fields as $field ) {
+				if( ! is_object( $field ) )
+					continue;
+
+				$field->id = isset( $field->id ) ? preg_replace( '/[^A-Za-z0-9_\-]/', '', (string) $field->id ) : '';
+				$field->type = isset( $field->type ) ? sanitize_key( $field->type ) : 'text';
+				$field->placeholder = isset( $field->placeholder ) ? wp_kses( (string) $field->placeholder, self::$allow_html_minimal ) : '';
+				$field->required = ! empty( $field->required );
+
+				$sanitized[] = $field;
+			}
+
+			return $sanitized;
+		}
 
 		public static function get_sequence(Wheel_Model $w, $play = 1) {
 			return Helper_Service::encrypt(join('::', [

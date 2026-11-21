@@ -283,6 +283,8 @@ namespace MABEL_WOF_LITE\Code\Controllers
 				$options->list = sanitize_text_field($options->list);
 			if(isset($options->list_provider))
 				$options->list_provider = sanitize_text_field($options->list_provider);
+			if(isset($options->fields))
+				$options->fields = Wheel_service::sanitize_fields($options->fields);
 			if(isset($options->email_placeholder))
 				$options->email_placeholder = sanitize_text_field($options->email_placeholder);
 			if(isset($options->losing_text))
